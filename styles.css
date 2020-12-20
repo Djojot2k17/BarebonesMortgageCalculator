@@ -1,0 +1,450 @@
+/* RESET */
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+/* html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+body {
+  line-height: 1;
+}
+ol,
+ul {
+  list-style: none;
+}
+blockquote,
+q {
+  quotes: none;
+}
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: "";
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+body {
+  font-family: Roboto;
+}
+*/
+/* END RESET */
+
+/* START CUSTOM */
+.container-fluid {
+  padding: 0 !important;
+}
+#logoText {
+  font-size: 1.5rem;
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  margin-left: 1rem;
+}
+
+#landing {
+  background: linear-gradient(to top, #ffffff, #1055f7);
+}
+
+.extraPadding {
+  padding-top: 5rem;
+}
+/* @media (max-width: 575.98px) {
+  .resizeMe {
+    font-size: 4vw;
+  }
+}
+
+.main {
+  background-color: inherit;
+  padding-top: 0;
+  margin-top: 0;
+  float: left;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  left: -15%;
+  height: 10rem;
+}
+
+.arrow-wrap {
+  position: absolute;
+  z-index: 1;
+  left: 50%;
+  top: -5em;
+  margin-left: -5em;
+  background: #ffffff;
+  width: 10em;
+  height: 10em;
+  padding: 4em 2em;
+  border-radius: 50%;
+  font-size: 0.5em;
+  display: block;
+  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.8);
+}
+
+.arrow {
+  float: left;
+  position: relative;
+  width: 0px;
+  height: 0px;
+  border-style: solid;
+  border-width: 3em 3em 0 3em;
+  border-color: #ffffff transparent transparent transparent;
+  transform: rotate(360deg);
+}
+
+.arrow:after {
+  content: "";
+  position: absolute;
+  top: -3.2em;
+  left: -3em;
+  width: 0px;
+  height: 0px;
+  border-style: solid;
+  border-width: 3em 3em 0 3em;
+  border-color: #111 transparent transparent transparent;
+  transform: rotate(360deg);
+}
+
+.arrow-wrap:hover {
+  box-shadow: 0px 0px 16px 0px rgba(0, 0, 0, 0.8);
+  transform: scale(1.05);
+}
+
+@keyframes arrows {
+  0% {
+    top: 0;
+  }
+
+  10% {
+    top: 16%;
+  }
+
+  20% {
+    top: 0;
+  }
+
+  30% {
+    top: 16%;
+  }
+
+  40% {
+    top: -16%;
+  }
+
+  50% {
+    top: 16%;
+  }
+
+  60% {
+    top: 0;
+  }
+
+  70% {
+    top: 16%;
+  }
+
+  80% {
+    top: -16%;
+  }
+
+  90% {
+    top: 16%;
+  }
+
+  100% {
+    top: 0;
+  }
+}
+
+.arrow-wrap .arrow {
+  animation: arrows 2.8s 0.4s;
+  animation-delay: 3s;
+}
+
+@media (max-width: 575.98px) {
+  .arrow,
+  .arrow-wrap,
+  .main {
+    display: none;
+  }
+}
+.btn:active {
+  transform: scale(0.96);
+}
+.hideMe {
+  display: none;
+}
+.findMe {
+  display: block;
+} */
+.niceCard {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.75);
+  transition: 0.3s;
+}
+
+/*
+.centerIt {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  padding-right: 50%;
+}
+.myFont {
+  font-family: Helvetica;
+  font-weight: 700;
+}
+.testy {
+  left: 50%;
+  margin-top: -50vw;
+  margin-bottom: -58vw;
+  max-height: 100vh;
+  position: relative;
+  right: 50%;
+  height: 86vh;
+}
+.testy2 {
+  margin-left: -30vw;
+  left: 50%;
+  right: 50%;
+}
+.testy3 {
+  position: absolute;
+  left: -50%;
+  margin-bottom: 23vw;
+}
+.testy4 {
+  position: absolute;
+  margin-top: -38vw;
+  left: -5%;
+}
+.buttonFont {
+  font-weight: 600;
+  color: #ffffff;
+}
+.input-title {
+  background-color: #101329;
+  border-radius: 0.8rem 0 0 0.8rem;
+  width: 9rem;
+}
+.input-field {
+  background-color: #ffffff;
+  border-style: solid;
+  border: solid;
+  border-color: #101329;
+  border-radius: 1.2rem 0 1.2rem 1.2rem;
+}
+.white {
+  color: #ffffff;
+}
+.bg-white {
+  background-color: #ffffff;
+}
+.myDark {
+  background-color: #101329;
+}
+.myDarkText {
+  color: #101329;
+}
+.animate-left {
+  position: relative;
+  animation-name: animate1;
+  animation-duration: 2.5s;
+  animation-fill-mode: forwards;
+}
+@keyframes animate1 {
+  0% {
+    transform: translate(0, 0);
+  }
+
+  100% {
+    transform: translate(-60rem, 0);
+  }
+}
+.animate-up {
+  position: relative;
+  animation-name: animate2;
+  animation-duration: 2s;
+  animation-fill-mode: forwards;
+}
+@keyframes animate2 {
+  0% {
+    transform: translate(0, 0);
+  }
+
+  100% {
+    transform: translate(0, -35rem);
+  }
+} */
+
+#startDateLabel {
+  background-color: transparent;
+  border: none;
+}
+
+/* TABLE */
+
+.tableContainer {
+  overflow-x: auto;
+  max-height: 705px;
+  /* border: 0.5px solid rgba(7, 81, 141, 0.534); */
+  border-radius: 5px;
+  margin-bottom: 2rem;
+}
+
+#calculatedTable {
+  width: 100%;
+}
+
+#calculatedTable th {
+  position: sticky;
+  top: 0;
+  background-color: rgb(227, 231, 233);
+  padding: 1rem;
+  outline: 1px solid white;
+  min-width: 120px;
+}
+
+#calculatedTable th td {
+  white-space: nowrap;
+}
+
+#calculatedTable td {
+  padding: 0.5rem;
+  outline: 0.1px solid rgb(201, 201, 201);
+}
+
+#tableInfo {
+  margin-bottom: 10rem;
+}
+
+/* SCROLLBAR */
+
+/* width */
+.tableContainer::scrollbar {
+  width: 15px;
+}
+
+/* Track */
+.tableContainer::scrollbar-track {
+  background: rgb(255, 255, 255);
+  box-shadow: inset 0 0 2px rgb(148, 157, 158);
+  border-radius: 5px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0 "adfadsf";
+}
+
+/* Handle */
+.tableContainer::scrollbar-thumb {
+  background: rgb(13, 148, 211);
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+.tableContainer::scrollbar-thumb:hover {
+  background: #005f8b;
+}

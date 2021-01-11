@@ -434,7 +434,7 @@ detailButton.addEventListener("click", () => {
       },
     },
   };
-  // FIX THIS FN BUUUUUG!
+  // Get rid of the previous chart on page refresh.
   // console.log(chartData.data);
   if (window.myChart !== undefined) {
     window.myChart.destroy();

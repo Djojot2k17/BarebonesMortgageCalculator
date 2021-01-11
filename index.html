@@ -38,6 +38,7 @@
       integrity="sha512-/zs32ZEJh+/EO2N1b0PEdoA10JkdC3zJ8L5FTiQu82LR9S/rOQNfQN7U59U9BC12swNeRAz3HSzIL2vpp4fv3w=="
       crossorigin="anonymous"
     />
+    <link rel="stylesheet" href="Css/prism.css">
     <!-- <script src="Scripts/jspdf.es.js"></script> -->
     <script src="Scripts/html2pdf.bundle.min.js"></script>
 
@@ -127,10 +128,21 @@
           </div>
         </div> -->
     <!-- END LANDING -->
-    <div class="container">
+    <div class="container-fluid">
       <!-- CALCULATOR -->
-      <h1 class="m-5 text-center">Calculator</h1>
-      <div class="row">
+      <h1 class="m-5 text-center">Mortgage Calculator</h1>
+      <p>
+        This is a weekend project I did with a couple of guys from Coder
+        Foundry. It's a simple Mortgage Calculator.
+      </p>
+      <p>Step 1: Move the Home Price slider.</p>
+      <p>
+        Step 2: Adjust the Down Payment, Length of the Loan, and Interest Rate
+      </p>
+      <p>Step 3: Click on 'Details'</p>
+      <p>This generates a chart using the selected Date as a starting point.</p>
+      <p>Technologies used: Html, CSS, JavaScript, and ChartJs</p>
+      <div class="row pl-2">
         <div class="col-md-4 border rounded p-3 mb-5">
           <h3 class="text-center pb-3">Initial Transaction</h3>
           <div class="input-group mb-3 md-form">
@@ -268,6 +280,18 @@
                 >Download PDF</a
               >
             </li>
+            <li class="nav-item" role="presentation">
+              <a
+                class="nav-link"
+                id="code"
+                data-toggle="tab"
+                role="tab"
+                href="#code-tab"
+                aria-controls="code"
+                aria-selected="false"
+                >Code</a
+              >
+            </li>
           </ul>
           <div class="tab-content" id="myTabContent">
             <div
@@ -313,6 +337,269 @@
                 Download Doc
               </button>
             </div>
+            <div
+              class="tab-pane fade"
+              id="code-tab"
+              role="tabpanel"
+              aria-labelledby="code-tab"
+            >
+            <p class="pt-2">Since I did the JavaScript portion of this project, I thought I'd explain how I got this to work.</p>
+            <p>After having declared and added event listeners to all the inputs, we needed to do the calculations.</p>
+            <div style="height: 630px; overflow-y: auto;">
+            <pre>
+              <code class="language-javascript line-numbers">
+detailButton.addEventListener("click", () => {
+  // Grab all the data currently in our calculator
+  let hp = numberWithoutCommas(homePrice.value); // NumbersWithoutCommas is a simple regex
+  let dp = numberWithoutCommas(downpayment.value); // that gets rid of commas
+  let dpp = dpPercentage.value; // some of these live outside this function's scope
+
+  let loan = parseFloat(numberWithoutCommas(loanAmount.value));
+  let term = years.value;
+  let termInMonths = term * 12;
+  let interest = parseFloat(interestRate.value);
+  displayMonthlyPayment(hp, dp, term, interest); // Make sure we have the latest values
+  let monthly = parseFloat(monthlyAccurate); 
+  let startDate = mortgageStartDate.value;
+  let table = document.getElementById("tableBody");
+
+  // Reset table every click
+  table.innerHTML = "";
+
+  // Set an empty table and year array
+  let tableArray = [];
+  let yearArray = [];
+
+  // balance = Loan - principal paid for current month
+  // monthly payment = principal paid for current month + interest per month
+  // principal paid for current month = monthly payment - interest per month
+  // interest per month = balance * rate / 1200
+  // principal paid to date = sum of all principal
+  // interest to date = sum of all interest
+
+  // Set a starting object to do our calculations on
+  let ct = {
+    balance: loan,
+    monthlyPayment: monthly,
+    principalPaid: 0,
+    interestPaid: (loan * interest) / 1200,
+    principalToDate: 0,
+    interestToDate: 0,
+  };
+
+  // Loop through the term in months and apply the calculations to the ct object on each pass.
+
+  for (let i = 0; i <= termInMonths; i++) {
+    ct.balance = ct.balance - ct.principalPaid; // OK
+    ct.monthlyPayment = monthly; // OK
+    ct.interestPaid = (ct.balance * interest) / 1200;
+    ct.principalPaid = ct.monthlyPayment - ct.interestPaid;
+    ct.principalToDate += ct.principalPaid;
+    ct.interestToDate += ct.interestPaid;
+
+    // Populate the table array with the objects we'll use for displaying the table.
+    tableArray.push({
+      balance: ct.balance,
+      monthlyPayment: ct.monthlyPayment,
+      principalPaid: ct.principalPaid,
+      interestPaid: ct.interestPaid,
+      principalToDate: ct.principalToDate,
+      interestToDate: ct.interestToDate,
+    });
+  }
+
+  // Because we're using a date based loop, we need to create an array of Date objects.
+  // Set an empty array to push our dates to
+  let dateArray = [];
+
+  // Set start date
+  let d1 = new Date(startDate);
+  // Add one to days (damn 0 indexed values)
+  d1.adjust("days", 1); // .adjust and .each are separate functions I'll display below.
+  // Set end date
+  let d2 = new Date();
+  d2.adjust("months", termInMonths + 1);
+  // Set output to push to our dateArray
+  let output = "";
+  // Had to have a separate output for the years in chartJs
+  let output2 = "";
+  // loop by months
+  d1.each(d2, "months", 1, function (currentDate, currentStep, thisDate) {
+    // output = mm/dd/yyyy
+    output = `${new Date(currentDate).getMonth() + 1}/${new Date(currentDate).getDate()}/
+      ${new Date(currentDate).getFullYear()}`;
+
+    // Until we get to the date of termInMonths, push output to array
+    dateArray.push(output);
+    output2 = `${new Date(currentDate).getFullYear()}`; // output2 = yyyy
+    yearArray.push(output2);
+  });
+
+  // Total principal cannot be greater than original balance (loan)
+  // Js had us bangin our heads against a wall tryin to figure this one out
+  // Just replace the very last value with the previous value and voila.
+  tableArray[tableArray.length - 1].principalToDate =
+    tableArray[tableArray.length - 2].principalToDate;
+
+  // Set ChartJs empty data and color arrays
+  let balanceData = [];
+  let balanceBgColor = [];
+  let balanceBorder = [];
+  let principalData = [];
+  let principalBgColor = [];
+  let principalBorder = [];
+  let interestData = [];
+  let interestBgColor = [];
+  let interestBorder = [];
+
+  // Loop through the date array and get the html element to populate with data.
+  for (let i = 0; i < dateArray.length; i++) {
+    // numbersWithCommas is a regext that adds commas back in
+    table.innerHTML += `
+    &lt;tr&gt;
+      &lt;td&gt;${dateArray[i]}&lt;/td&gt;
+      &lt;td&gt;$ ${numberWithCommas(tableArray[i].balance.toFixed(2))}&lt;/td&gt;
+      &lt;td&gt;$ ${numberWithCommas(tableArray[i].monthlyPayment.toFixed(2))}&lt;/td&gt;
+      &lt;td&gt;$ ${numberWithCommas(tableArray[i].principalPaid.toFixed(2))}&lt;/td&gt;
+      &lt;td&gt;$ ${numberWithCommas(tableArray[i].interestPaid.toFixed(2))}&lt;/td&gt;
+      &lt;td&gt;$ ${numberWithCommas(tableArray[i].principalToDate.toFixed(2))}&lt;/td&gt;
+      &lt;td&gt;$ ${numberWithCommas(tableArray[i].interestToDate.toFixed(2))}&lt;/td&gt;
+    &lt;/tr&gt;`;
+
+    // Also set the colors for ChartJs
+    balanceData.push(Number(tableArray[i].balance.toFixed(2)));
+    balanceBgColor.push("rgba(255, 99, 132, 0.2)");
+    balanceBorder.push("rgba(200, 99, 132, 1)");
+    principalData.push(Number(tableArray[i].principalToDate.toFixed(2)));
+    principalBgColor.push("rgba(7, 141, 14, 0.2)");
+    principalBorder.push("rgba(7, 141, 14, 1)");
+    interestData.push(Number(tableArray[i].interestToDate.toFixed(2)));
+    interestBgColor.push("rgba(13, 103, 177, 0.2)");
+    interestBorder.push("rgba(13, 103, 177, 1)");
+  }
+
+  // Fade the table in
+  setTimeout(() => {
+    $(".tableContainer").fadeIn(500);
+    $("#tableInfo").fadeIn(500);
+  }, 1000);
+
+  // Populate ChartJs object
+  let chartData = {
+    type: "bar",
+    data: {
+      labels: yearArray,
+      datasets: [
+        {
+          label: "Balance",
+          data: balanceData,
+          backgroundColor: balanceBgColor,
+          borderColor: balanceBorder,
+          borderWidth: 0.5,
+        },
+        {
+          label: "Principal to Date",
+          data: principalData,
+          backgroundColor: principalBgColor,
+          borderColor: principalBorder,
+          borderWidth: 0.5,
+        },
+        {
+          label: "Interest to Date",
+          data: interestData,
+          backgroundColor: interestBgColor,
+          borderColor: interestBorder,
+          borderWidth: 0.5,
+        },
+      ],
+    },
+    options: {
+      tooltips: {
+        mode: "index",
+        intersect: false,
+      },
+      scales: {
+        yAxes: [
+          {
+            ticks: {
+              beginAtZero: true,
+            },
+            gridLines: {
+              display: false,
+            },
+          },
+        ],
+        xAxes: [{ gridLines: { display: false } }],
+      },
+    },
+  };
+
+  // Get rid of the previous chart on page refresh.
+  if (window.myChart !== undefined) {
+    window.myChart.destroy();
+  }
+  // Draw the chart
+  var ctx = document.getElementById("tableInfo").getContext("2d");
+  window.myChart = new Chart(ctx, chartData, {
+    responsive: true,
+  });
+});
+
+// This is how I did the Date.adjust and Date.each functions
+// Props to Kentrichardson.com for providing these awesome functions
+// Allows simple adjustments to the Date object
+
+Date.prototype.adjust = function (part, amount) {
+  part = part.toLowerCase();
+
+  let map = {
+      years: "FullYear",
+      months: "Month",
+      weeks: "Hours",
+      days: "Hours",
+      hours: "Hours",
+      minutes: "Minutes",
+      seconds: "Seconds",
+      milliseconds: "Milliseconds",
+      utcyears: "UTCFullYear",
+      utcmonths: "UTCMonth",
+      weeks: "UTCHours",
+      utcdays: "UTCHours",
+      utchours: "UTCHours",
+      utcminutes: "UTCMinutes",
+      utcseconds: "UTCSeconds",
+      utcmilliseconds: "UTCMilliseconds",
+    },
+    mapPart = map[part];
+
+  if (part == "weeks" || part == "utcweeks") amount *= 168;
+  if (part == "days" || part == "utcdays") amount *= 24;
+
+  this["set" + mapPart](this["get" + mapPart]() + amount);
+
+  return this;
+};
+
+// Basically Date.forEach() from date x to date y. Calculates for leap years
+Date.prototype.each = function (endDate, part, step, fn, bind) {
+  let fromDate = new Date(this.getTime()),
+    toDate = new Date(endDate.getTime()),
+    pm = fromDate <= toDate ? 1 : -1,
+    i = 0;
+
+  while (
+    (pm === 1 && fromDate <= toDate) ||
+    (pm === -1 && fromDate >= toDate)
+  ) {
+    if (fn.call(bind, fromDate, i, this) === false) break;
+    i += step;
+    fromDate.adjust(part, step * pm);
+  }
+  return this;
+};
+              </code>
+            </pre>
+            </div>
           </div>
         </div>
       </div>
@@ -344,6 +631,7 @@
       src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"
     ></script>
     <script src="//cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+    <script src="Scripts/prism.js"></script>
 
     <script src="Scripts/jquery.slimscroll.min.js"></script>
     <script src="Scripts/app.js"></script>
